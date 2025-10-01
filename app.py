@@ -28,7 +28,7 @@ df_colunas['Assunto'] = df_colunas['Assunto'].str.replace('Assunto:', '', regex=
 # Criar DataFrame limpo
 df_limpo = df_colunas.copy()
 
- category_patterns = {
+category_patterns = {
     # Categoria Atendimento
     'Atendimento Humano': ['falar com atendente','atendente','consultor','quero falar com alguém','quero falar com uma pessoa'],
     # Categoria Colação de grau/Conclusão de Curso
