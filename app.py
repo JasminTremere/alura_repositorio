@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("📊 Dashboard EAD - Análise de Assuntos")
+st.title("👾Dashboard de Análise Ancheita!👾")
 st.markdown("Análise de assuntos extraídos do CSV.")
  
 df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/Dados_ead.csv', sep=';')
@@ -145,10 +145,6 @@ df_filtrado = df_limpo[
     (df_limpo['Nome'].isin(nomes_selecionados))
 ]
  
-# --- Conteúdo Principal ---
-st.title("👾Dashboard de Análise Ancheita!👾")
-st.markdown("aaaaaaaaaaaaaaaaaaaaaaaah")
- 
 st.subheader("Métricas Principais")
 
 col1, col2, col3 = st.columns(3)
@@ -256,5 +252,6 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
