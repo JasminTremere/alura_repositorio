@@ -179,7 +179,7 @@ st.plotly_chart(fig, use_container_width=True)
 # st.plotly_chart(fig_pie, use_container_width=True)
 
 # Tabela detalhada
-st.subheader("Dados Detalhados")
+st.subheader("Dados Detalhados - EAD")
 st.dataframe(df_filtrado)
  
 
@@ -253,6 +253,7 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
 
