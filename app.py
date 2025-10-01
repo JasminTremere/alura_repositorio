@@ -127,27 +127,27 @@ df_limpo['Categoria'] = df_limpo['Assunto'].apply(categorize_assunto)
 
 #--------------------------------------------------------------------------------------------------------------------------------
  
-## --- Barra Lateral (Filtros) ---
-#st.sidebar.header("🔍 Filtros")
-#
-## Filtrar por Categoria (opcional)
-#categorias_disponiveis = sorted(df_limpo['Categoria'].unique())
-#categorias_selecionadas = st.sidebar.multiselect(
-#    "Categoria (opcional)", categorias_disponiveis
-#)
-#
-## Filtrar por Nome (opcional)
-#nomes_disponiveis = sorted(df_limpo['Nome'].unique())
-#nomes_selecionados = st.sidebar.multiselect(
-#    "Nome (opcional)", nomes_disponiveis
-#)
-#
-## Aplicar filtros (não obrigatórios)
-#df_filtrado = df_limpo.copy()
-#if categorias_selecionadas:
-#    df_filtrado = df_filtrado[df_filtrado['Categoria'].isin(categorias_selecionadas)]
-#if nomes_selecionados:
-#    df_filtrado = df_filtrado[df_filtrado['Nome'].isin(nomes_selecionados)]
+# --- Barra Lateral (Filtros) ---
+st.sidebar.header("🔍 Filtros")
+
+# Filtrar por Categoria (opcional)
+categorias_disponiveis = sorted(df_limpo['Categoria'].unique())
+categorias_selecionadas = st.sidebar.multiselect(
+    "Categoria (opcional)", categorias_disponiveis
+)
+
+# Filtrar por Nome (opcional)
+nomes_disponiveis = sorted(df_limpo['Nome'].unique())
+nomes_selecionados = st.sidebar.multiselect(
+    "Nome (opcional)", nomes_disponiveis
+)
+
+# Aplicar filtros (não obrigatórios)
+df_filtrado = df_limpo.copy()
+if categorias_selecionadas:
+    df_filtrado = df_filtrado[df_filtrado['Categoria'].isin(categorias_selecionadas)]
+if nomes_selecionados:
+    df_filtrado = df_filtrado[df_filtrado['Nome'].isin(nomes_selecionados)]
 
 
 st.subheader("Métricas Principais")
@@ -258,6 +258,7 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
 
