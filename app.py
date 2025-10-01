@@ -126,24 +126,28 @@ def categorize_assunto(assunto):
 df_limpo['Categoria'] = df_limpo['Assunto'].apply(categorize_assunto)
 
 #--------------------------------------------------------------------------------------------------------------------------------
-
+ 
 # --- Barra Lateral (Filtros) ---
- 
 st.sidebar.header("🔍 Filtros")
- 
-# Filtrar por Categoria
+
+# Filtrar por Categoria (opcional)
 categorias_disponiveis = sorted(df_limpo['Categoria'].unique())
-categorias_selecionadas = st.sidebar.multiselect("Categoria", categorias_disponiveis, default=categorias_disponiveis)
+categorias_selecionadas = st.sidebar.multiselect(
+    "Categoria (opcional)", categorias_disponiveis
+)
 
-# Filtrar por Nome
+# Filtrar por Nome (opcional)
 nomes_disponiveis = sorted(df_limpo['Nome'].unique())
-nomes_selecionados = st.sidebar.multiselect("Nome", nomes_disponiveis, default=nomes_disponiveis)
+nomes_selecionados = st.sidebar.multiselect(
+    "Nome (opcional)", nomes_disponiveis
+)
 
-# Aplicar filtros
-df_filtrado = df_limpo[
-    (df_limpo['Categoria'].isin(categorias_selecionadas)) &
-    (df_limpo['Nome'].isin(nomes_selecionados))
-]
+# Aplicar filtros (não obrigatórios)
+df_filtrado = df_limpo.copy()
+if categorias_selecionadas:
+    df_filtrado = df_filtrado[df_filtrado['Categoria'].isin(categorias_selecionadas)]
+if nomes_selecionados:
+    df_filtrado = df_filtrado[df_filtrado['Nome'].isin(nomes_selecionados)]
  
 st.subheader("Métricas Principais")
 
@@ -253,6 +257,7 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
 
