@@ -168,14 +168,15 @@ fig = px.bar(
 st.plotly_chart(fig, use_container_width=True)
 
 # Gráfico de pizza por categoria
-fig_pie = px.pie(
-    grafico_categoria,
-    names='Categoria',
-    values='Count',
-    title='Proporção por Categoria',
-    hole=0.4
-)
-st.plotly_chart(fig_pie, use_container_width=True)
+# Gráfico de pizza por categoria
+# fig_pie = px.pie(
+#     grafico_categoria,
+#     names='Categoria',
+#     values='Count',
+#     title='Proporção por Categoria',
+#     hole=0.4
+# )
+# st.plotly_chart(fig_pie, use_container_width=True)
 
 # Tabela detalhada
 st.subheader("Dados Detalhados")
@@ -252,6 +253,7 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
 
