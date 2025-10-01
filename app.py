@@ -14,7 +14,7 @@ st.set_page_config(
 st.title("📊 Dashboard EAD - Análise de Assuntos")
 st.markdown("Análise de assuntos extraídos do CSV.")
  
-df_ead = pd.read_csv('https://raw.githubusercontent.com/usuario/repo/main/Dados_ead.csv', sep=';')
+df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/Dados_ead.csv', sep=';')
 
 # Separar coluna 'Ações,%,Total'
 df_colunas = df_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
@@ -256,4 +256,5 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
