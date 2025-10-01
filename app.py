@@ -162,7 +162,7 @@ fig = px.bar(
     grafico_categoria,
     x='Categoria',
     y='Count',
-    title='Distribuição de Categorias',
+    title='Distribuição de Categorias - EAD',
     labels={'Categoria':'Categoria', 'Count':'Quantidade'}
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -253,6 +253,7 @@ st.dataframe(df_filtrado)
 #st.subheader("Dados Detalhados")
 #st.dataframe(df_filtrado)
  
+
 
 
 
