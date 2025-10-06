@@ -15,10 +15,17 @@ st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
 # Carregar dados 
  
-df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', sep=';')
-df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';')
-df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';')
-df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', sep=';')
+df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv',   sep=';', quoting=csv.QUOTE_NONE, # Tenta ignorar aspas
+    encoding='latin1')
+df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';', 
+    quoting=csv.QUOTE_NONE, # Tenta ignorar aspas
+    encoding='latin1')
+df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';', 
+    quoting=csv.QUOTE_NONE, # Tenta ignorar aspas
+    encoding='latin1')
+df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', sep=';', 
+    quoting=csv.QUOTE_NONE, # Tenta ignorar aspas
+    encoding='latin1')
 
 # --------------------------------------------------------------------------------------------------------------------------------
 ## Outros DataFrames (Ead)
