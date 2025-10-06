@@ -550,7 +550,7 @@ with col_graf1:
         st.warning("Nenhum dado para exibir no gráfico.")
  
 with col_graf2:
-     if not df_pres_semi_limpo.empty:
+    if not df_pres_semi_limpo.empty:
         grafico_categoria_pres_semi = (
             df_pres_semi_limpo.groupby('Categoria').size()
             .nlargest(10)
@@ -571,11 +571,9 @@ with col_graf2:
 
 
  # Tabela Relatório Outros EAD e Outros Presencial e Semipresencial
+st.subheader("Dados Detalhados -  Outros EAD e Presencial/Semipresencial")
 
-
-st.subheader("Dados Detalhados -  Outros EAD e Presencial/Semipresencial")       
-
- col_tab1, col_tab2 = st.columns(2)
+col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
     tabela_ead = df_ead_limpo.groupby('Categoria').size().reset_index(name='Quantidade')
@@ -585,33 +583,32 @@ with col_tab2:
     tabela_pres_semi = df_pres_semi_limpo.groupby('Categoria').size().reset_index(name='Quantidade')
     st.dataframe(tabela_pres_semi)
 
-
 # Gráficos Relatório Suporte EAD e Suporte Presencial e Semipresencial
 
 col_graf3, col_graf4 = st.columns(2)
- 
+
 with col_graf3:
     if not df_sup_ead_limpo.empty:
-           grafico_categoria_sup_ead = (
-        df_sup_ead_limpo.groupby('Categoria')
-        .size()
-        .nlargest(10)
-        .sort_values(ascending=True)
-        .reset_index(name='Quantidade')
-    )
+        grafico_categoria_sup_ead = (
+            df_sup_ead_limpo.groupby('Categoria')
+            .size()
+            .nlargest(10)
+            .sort_values(ascending=True)
+            .reset_index(name='Quantidade')
+        )
 
-    fig_sup_ead = px.bar(
-        grafico_categoria_sup_ead,
-        y='Categoria',
-        x='Quantidade',
-        orientation='h',
-        title='Top 10 Categorias de Suporte (EAD)',
-        text='Quantidade'
-    )
-    fig_sup_ead.update_traces(textposition='outside')
-    fig_sup_ead.update_layout(yaxis_title='', xaxis_title='Quantidade')
+        fig_sup_ead = px.bar(
+            grafico_categoria_sup_ead,
+            y='Categoria',
+            x='Quantidade',
+            orientation='h',
+            title='Top 10 Categorias de Suporte (EAD)',
+            text='Quantidade'
+        )
+        fig_sup_ead.update_traces(textposition='outside')
+        fig_sup_ead.update_layout(yaxis_title='', xaxis_title='Quantidade')
 
-    st.plotly_chart(fig_sup_ead, use_container_width=True)
+        st.plotly_chart(fig_sup_ead, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir no gráfico.")
 
@@ -640,7 +637,7 @@ with col_graf4:
 
 st.subheader("Dados Detalhados -  Suporte EAD e Presencial/Semipresencial")
 
- col_tab1, col_tab2 = st.columns(2)
+col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
     tabela_sup_ead = df_sup_ead_limpo.groupby('Categoria').size().reset_index(name='Quantidade')
