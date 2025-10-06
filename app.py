@@ -15,16 +15,10 @@ st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
 # Carregar dados 
  
-df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/Dados_ead.csv', sep=';')
-df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/Dados_pres_semi.csv', sep=';')
-df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/Suporte_ead.csv', sep=';')
-df_sup_pres_semi = pd.read_csv(
-    'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/refs/heads/main/Suporte_pres_semi.csv',
-    sep=';',
-    encoding='utf-8',
-    engine='python',        
-    on_bad_lines='skip'     
-)
+df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', sep=';')
+df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';')
+df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';')
+df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/refs/heads/main/sup_pres_semi.csv', sep=';')
 
 # --------------------------------------------------------------------------------------------------------------------------------
 ## Outros DataFrames (Ead)
