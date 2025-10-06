@@ -367,7 +367,7 @@ def categorize_assunto3(assunto):
     return 'Outros'
 
 # Aplicar categorização
-df_sup_ead_limpo['Categoria'] = df_sup_ead['Assunto'].apply(categorize_assunto3)
+df_sup_ead_limpo['Categoria'] = df_sup_ead_limpo['Nome'].apply(categorize_assunto3)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
@@ -592,21 +592,26 @@ col_graf3, col_graf4 = st.columns(2)
  
 with col_graf3:
     if not df_sup_ead_limpo.empty:
-        grafico_sup_ead = (
-            df_sup_ead_limpo.groupby('Categoria').size()
-            .nlargest(10)
-            .sort_values(ascending=True)
-            .reset_index(name='Quantidade')
-        )
-        fig_sup_ead = px.bar(
-            grafico_sup_ead,
-            x='Categoria',
-            y='Quantidade',
-            title='Distribuição de Categorias - Suporte EAD',
-            labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
-        )
-        fig_sup_ead.update_layout(title_x=0.1)
-        st.plotly_chart(fig_sup_ead, use_container_width=True)
+           grafico_categoria_sup_ead = (
+        df_sup_ead_limpo.groupby('Categoria')
+        .size()
+        .nlargest(10)
+        .sort_values(ascending=True)
+        .reset_index(name='Quantidade')
+    )
+
+    fig_sup_ead = px.bar(
+        grafico_categoria_sup_ead,
+        y='Categoria',
+        x='Quantidade',
+        orientation='h',
+        title='Top 10 Categorias de Suporte (EAD)',
+        text='Quantidade'
+    )
+    fig_sup_ead.update_traces(textposition='outside')
+    fig_sup_ead.update_layout(yaxis_title='', xaxis_title='Quantidade')
+
+    st.plotly_chart(fig_sup_ead, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir no gráfico.")
 
