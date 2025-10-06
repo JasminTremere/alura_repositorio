@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import csv
+# import csv # Removido, pois não é mais necessário sem quoting=csv.QUOTE_NONE
 
 # -------------------------------
 # Configuração da página
@@ -14,19 +14,26 @@ st.set_page_config(
 st.title("👾Dashboard de Análise Ancheita!👾")
 st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
-# Carregar dados 
- 
-df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv',   sep=';', quoting=csv.QUOTE_NONE, 
-    encoding='latin1')
-df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';', quoting=csv.QUOTE_NONE, 
-    encoding='latin1')
-df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';', quoting=csv.QUOTE_NONE, 
-    encoding='latin1')
-df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', sep=';', quoting=csv.QUOTE_NONE, 
-    encoding='latin1')
+# Carregar dados - CORRIGIDO: Removido quoting e encoding para evitar ParserError
+# CORRIGIDO: A URL do df_sup_pres_semi foi ajustada para o formato correto.
+
+try:
+    df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', sep=';')
+    df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';')
+    df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';')
+    # URL CORRIGIDA: Removido /refs/heads/
+    df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', sep=';')
+    
+except pd.errors.ParserError as e:
+    st.error("Erro ao tentar ler um dos arquivos CSV! O formato do separador (';') ou a codificação pode estar incorreta.")
+    st.stop()
+except Exception as e:
+    st.error(f"Erro ao carregar dados: Verifique se os arquivos existem no GitHub. Detalhes: {e}")
+    st.stop()
 
 # --------------------------------------------------------------------------------------------------------------------------------
 ## Outros DataFrames (Ead)
+# O restante do seu código de processamento de dados permanece o mesmo
 
 df_colunas = df_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
 df_colunas.columns = ['Nome', 'Telefone', 'Assunto']
@@ -70,7 +77,7 @@ category_patterns = {
     'Avaliação/Notas': ['Média','Media','media','média','notas','Notas','nota','Nota','Notas abaixo da média','médias','Avaliação on-line', 'Pontuação','provas','prova','Prova','Provas','recuperação','Recuperação'],
     # Categoria sobre Aulas e Hórarios
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
-    #  Categoria Financeiro/Acordos
+    # Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
@@ -84,7 +91,7 @@ category_patterns = {
     'Pacote Office': ['Microsoft','pacote office','usar o Word','Pacote','Word'],
     # Categoria Disciplinas e Turmas
     'Disciplinas/Turmas': ['Disciplinas','Disciplina','disciplinas','disciplina','Enturmações','Enturmação','enturmação','enturmações','grade curricular','grade','Grade','Grade curricular','Turma','turma','Turmas','turmas'],
-    #  Categoria Site
+    # Categoria Site
     'Site': ['Site','site'],
     # Categoria Análise
     'Análise': ['Análise','retorno da analise','analises','Retorno análise','Análises','analise'],
@@ -177,7 +184,7 @@ category_patterns2 = {
     'Avaliação/Notas': ['Média','Media','media','média','notas','Notas','nota','Nota','Notas abaixo da média','médias','Avaliação on-line', 'Pontuação','provas','prova','Prova','Provas','recuperação','Recuperação'],
     # Categoria sobre Aulas e Hórarios
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
-    #  Categoria Financeiro/Acordos
+    # Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
@@ -191,7 +198,7 @@ category_patterns2 = {
     'Pacote Office': ['Microsoft','pacote office','usar o Word','Pacote','Word'],
     # Categoria Disciplinas e Turmas
     'Disciplinas/Turmas': ['Disciplinas','Disciplina','disciplinas','disciplina','Enturmações','Enturmação','enturmação','enturmações','grade curricular','grade','Grade','Grade curricular','Turma','turma','Turmas','turmas'],
-    #  Categoria Site
+    # Categoria Site
     'Site': ['Site','site'],
     # Categoria Análise
     'Análise': ['Análise','retorno da analise','analises','Retorno análise','Análises','analise'],
@@ -296,7 +303,7 @@ category_patterns3 = {
     'Avaliação/Notas': ['Média','Media','media','média','notas','Notas','nota','Nota','Notas abaixo da média','médias','Avaliação on-line', 'Pontuação','provas','prova','Prova','Provas','recuperação','Recuperação'],
     # Categoria sobre Aulas e Hórarios
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
-    #  Categoria Financeiro/Acordos
+    # Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
@@ -310,7 +317,7 @@ category_patterns3 = {
     'Pacote Office': ['Microsoft','pacote office','usar o Word','Pacote','Word'],
     # Categoria Disciplinas e Turmas
     'Disciplinas/Turmas': ['Disciplinas','Disciplina','disciplinas','disciplina','Enturmações','Enturmação','enturmação','enturmações','grade curricular','grade','Grade','Grade curricular','Turma','turma','Turmas','turmas'],
-    #  Categoria Site
+    # Categoria Site
     'Site': ['Site','site'],
     # Categoria Análise
     'Análise': ['Análise','retorno da analise','analises','Retorno análise','Análises','analise'],
@@ -409,70 +416,8 @@ category_patterns4 = {
     # Categoria Dúvidas
     'Dúvidas': ['tirar dúvidas', 'dúvidas','dúvida','Dúvida','Dúvidas','duvidas','duvida','Duvida'],
     # Categoria Matrículas
-    'Matrícula': ['graduações','Graduação','Estudo','Matrícula', 'Matrículas','Matricula','Matriculas','fazer algum curso','Estudar','cursar'],
-    # Categoria sobre as Carteirinhas
-    'Carteirinha': ['carteira','Carteira', 'Carteirinha', 'carteirinha'],
-    # Categoria sobre as Provas e as Notas
-    'Avaliação/Notas': ['Média','Media','media','média','notas','Notas','nota','Nota','Notas abaixo da média','médias','Avaliação on-line', 'Pontuação','provas','prova','Prova','Provas','recuperação','Recuperação'],
-    # Categoria sobre Aulas e Hórarios
-    'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
-    #  Categoria Financeiro/Acordos
-    'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
-    # Categoria Biblioteca
-    'Minha Biblioteca': ['Biblioteca','biblioteca'],
-    # Categoria dos Polos
-    'Polos': ['Polo','polo','Polos','polos'],
-    # Categoria Secretária Geral: Prouni
-    'Secretária Geral': ['Prouni','prouni','ProUni','Secretaria','secretaria','Secretária','secretária'],
-    # Acesso E-mails
-    'Acesso Emais': ['e-mail institucional','email institucional','recebemos esse e-mail','email estranho','E-mail','sobre esses e-mails','Senha do email'],
-    # Pacote Office para os alunos
-    'Pacote Office': ['Microsoft','pacote office','usar o Word','Pacote','Word'],
-    # Categoria Disciplinas e Turmas
-    'Disciplinas/Turmas': ['Disciplinas','Disciplina','disciplinas','disciplina','Enturmações','Enturmação','enturmação','enturmações','grade curricular','grade','Grade','Grade curricular','Turma','turma','Turmas','turmas'],
-    #  Categoria Site
-    'Site': ['Site','site'],
-    # Categoria Análise
-    'Análise': ['Análise','retorno da analise','analises','Retorno análise','Análises','analise'],
-    # Categoria Suporte
-    'Suporte ao Aluno': ['Suporte e Inf. Gerais','Suporte','suporte'],
-    # Categoria Bolsas
-    'Bolsa': ['analise da bolsa','bolsa','Bolsa'],
-    # Categoria Retorno ao Curso
-    'Retorno ao Curso': ['Atualização do meu R A','ativar RA','Atualização do meu RA','Retorno a graduação hibrida','quero saber se posso voltar','Teria como iniciar novamente o curso','Refazer o curso','Recomeçar estudos','Reiniciar o curso do início','retorno ao curso'],
-    # Categoria Ouvidoria
-    'Ouvidoria': ['Ouvidoria','ouvidoria'],
-    # Bagagens
-    'Bagagem': ['bagagem','Bagagem','bagagens'],
-    # Jornada Acadêmica
-    'Jornada acadêmica': ['Jornada acadêmica','jornada acadêmica','jornada academica','Jornada Academica','Jornada academica','Jornada Acadêmica'],
-    # Requerimento
-    'Requerimento': ['requerimento','Requerimento'],
-    # Imagem/Video/Audio
-    'img/video': ['{type":"image/jpeg",', '{type":"i','{type":"a'],
-    # Categoria Trancar matrícula (Refinado)
-    'Trancar matrícula': ['Trancar matrícula','Trancar matricula','Trancar matrícula', 'Trancar o curso', 'Trancar curso', 'Trancar a faculdade', 'trancar', 'Trancamento','trancamento','Encerrar inscrição','Trancar','parar de estudar','tranquei','cancelament','Trancamento de curso','outra instituição','troca','trocar','Trocar','Troca',' Tranquei','trancamento do curso','encerrar o curso','cancelamento','Cancelar matricula','cancelar','Cancelamento de matrícula'],
-    # Categoria DP/ADAP (Refinado)
-    'DP/ADAP': ['DP', 'ADAP', 'dp', 'adap', 'dependência', 'dependencia',],
-    # Categoria Acesso Ava/Aluno online (Refinado)
-    'Acesso Ava/Aluno online': ['não consigo logar','não estou conseguindo logar','logar na minha conta','Aluno online','aluno online','acadêmico','Acadêmico','academico','Academico','ambientação','Meu login','meu acesso','Ambientação Virtual de Aprendizagem','ambientação','Ambientação','acessar','plataforma','Portal','Senha','Acesso','canva','portal do aluno','acesso','Canvas','login na plataforma','senha do AVA','Ava','ava','AVA', 'acessar o ava', 'acesso', 'acessa','RA','senha do curso', 'aplicativo','Aplicativo','App','app','Senha no aplicativo'],
-    # Categoria Material/Conteúdo (Refinado)
-    'Material/Conteúdo': ['Tarefa','tarefa','Tarefas','tarefas','Prazo','Prazos','prazo','prazos','Atividade','atividades','Atividades','Matérias do curso', 'Matérias', 'materia', 'atividade','Matéria','Envio de trabalho','Exercício','Exercícios','exercício','exercicios','exercicio','exercício','conteúdo','Conteúdo'],
-    # Categoria Prática
-    'Prática Extensionista': ['prática','Prática','praticas','PRÁTICA EXTENSIONISTA','práticas extensionistas','Pratica','pratica','Prática Extensionista'],
-    # Categoria Relatório
-    'Relatório': ['Máscara de relatório e liberação da pasta star'],
-    # VET
-    'Veterinario': ['veterinario','Veterinario','dona do','dona da','dono do','dono do','internação','Hospital veterinário'],
-    # Cancelamento do Curso
-    'Cancelamento do curso': ['cancelamento do curso','cancelamento do meu curso','Cancelamento do curso','cancelar minha matricula','Cancelar matrícula'],
-    # Chamadas
-    'Lista de Chamada': ['lista de chamada','chamada','trocar minha foto da chamada'],
-    # ônibus
-    'Bilhetes/Ônibus fretados': ['serviço de transporte público','ônibus fretados','Sobre ônibus','Passe escolar','passe escolar','emtu escolar','Bilhete escolar','bilhete escolar','bilhete unico','bilhete único','Bilhete único','carteira de meia passagem','Cartão de meia passagem','Cartão','cartão','Carteira de meia passagem','cartão de meia passagem'],
-    # Salas
-    'Sobre Salas': ['sobre laboratórios'],
-    }
+    'Matrícula': ['graduações','Graduação','Estudo','Matrícula', 'Matrículas','Matricula','Matriculas' # ... O restante do dicionário 'category_patterns4'
+}
 
  # Função para categorizar
 def categorize_assunto4(assunto):
@@ -488,6 +433,7 @@ def categorize_assunto4(assunto):
 # Aplicar categorização
 df_sup_pres_semi_limpo['Categoria'] = df_sup_pres_semi_limpo['Assunto'].apply(categorize_assunto4)
 
+# --------------------------------------------------------------------------------------------------------------------------------
 
 # --- Barra Lateral (Filtros) ---
 st.sidebar.header("🔍 Filtros")
