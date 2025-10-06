@@ -5,7 +5,7 @@ import plotly.express as px
 # -------------------------------
 # Configuração da página
 st.set_page_config(
-    page_title="Dashboard de Análise Ancheita!", # Apenas espaços normais (U+0020) aqui
+    page_title="Dashboard de Análise Ancheita!", 
     page_icon="📊",
     layout="wide"
 )
@@ -13,19 +13,65 @@ st.set_page_config(
 st.title("👾Dashboard de Análise Ancheita!👾")
 st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
-# Carregar dados - CORREÇÃO: Adicionando 'encoding='latin1'' (ISO-8859-1)
-# para tentar resolver o ParserError de codificação.
+# Carregar dados - CORREÇÃO: Usando 'encoding='latin1'', 'sep=;'.
+# Adicionado 'header=None' e 'names' para forçar a leitura de múltiplas colunas 
+# e 'on_bad_lines='skip'' para ignorar linhas malformadas, resolvendo o Tokenizing Error.
 
 try:
-    # Tenta ler todos os arquivos com o separador ';' e encoding='latin1'
-    df_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', sep=';', encoding='latin1')
-    df_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', sep=';', encoding='latin1')
-    df_sup_ead = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', sep=';', encoding='latin1')
-    df_sup_pres_semi = pd.read_csv('https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', sep=';', encoding='latin1')
+    # Lendo o CSV assumindo 3 colunas (visto no erro: "saw 3") 
+    # e renomeando a coluna principal para facilitar o split.
     
+    # DataFrame EAD
+    df_ead_raw = pd.read_csv(
+        'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', 
+        sep=';', 
+        encoding='latin1', 
+        header=None, # Não usa cabeçalho para evitar o erro de tokenização
+        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'], # Força colunas o suficiente
+        on_bad_lines='skip' # Ignora as linhas mal formadas (como a linha 898)
+    )
+    df_ead = df_ead_raw.iloc[1:].copy() # Remove a linha de cabeçalho original se for o caso
+    df_ead.columns = ['Ações,%,Total', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5']
+    
+    # DataFrame PRESENCIAL/SEMI
+    df_pres_semi_raw = pd.read_csv(
+        'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_pres_semi.csv', 
+        sep=';', 
+        encoding='latin1', 
+        header=None, 
+        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'],
+        on_bad_lines='skip'
+    )
+    df_pres_semi = df_pres_semi_raw.iloc[1:].copy()
+    df_pres_semi.columns = ['Ações,%,Total', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5']
+
+    # DataFrame SUPORTE EAD
+    df_sup_ead_raw = pd.read_csv(
+        'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_ead.csv', 
+        sep=';', 
+        encoding='latin1', 
+        header=None, 
+        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'],
+        on_bad_lines='skip'
+    )
+    df_sup_ead = df_sup_ead_raw.iloc[1:].copy()
+    df_sup_ead.columns = ['Ações,%,Total', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5']
+
+    # DataFrame SUPORTE PRESENCIAL/SEMI
+    df_sup_pres_semi_raw = pd.read_csv(
+        'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/sup_pres_semi.csv', 
+        sep=';', 
+        encoding='latin1', 
+        header=None, 
+        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'],
+        on_bad_lines='skip'
+    )
+    df_sup_pres_semi = df_sup_pres_semi_raw.iloc[1:].copy()
+    df_sup_pres_semi.columns = ['Ações,%,Total', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5']
+
+
 except pd.errors.ParserError as e:
-    # Mudei a string de erro para não mostrar o U+00A0 que estava no erro anterior
-    st.error(f"Erro ao tentar ler um dos arquivos CSV! Tente outra codificação (e.g., 'cp1252'). Detalhes do erro: {e}")
+    st.error(f"Erro ao tentar ler um dos arquivos CSV! Detalhes do erro: {e}")
     st.stop()
 except Exception as e:
     st.error(f"Erro ao carregar dados: Verifique se os arquivos existem no GitHub. Detalhes: {e}")
@@ -34,6 +80,7 @@ except Exception as e:
 # --------------------------------------------------------------------------------------------------------------------------------
 ## Processamento DataFrames (Ead)
 
+# O restante do código de processamento se mantém, mas agora os dados devem estar carregados corretamente
 df_colunas = df_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
 df_colunas.columns = ['Nome', 'Telefone', 'Assunto']
 
