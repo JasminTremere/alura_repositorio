@@ -22,12 +22,12 @@ df_sup_pres_semi = pd.read_csv(
     'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/refs/heads/main/Suporte_pres_semi.csv',
     sep=';',
     encoding='utf-8',
-    engine='python',       
-    on_bad_lines='skip'    
+    engine='python',        
+    on_bad_lines='skip'     
 )
 
-#--------------------------------------------------------------------------------------------------------------------------------
-# Outros DataFrames (Ead)
+# --------------------------------------------------------------------------------------------------------------------------------
+## Outros DataFrames (Ead)
 
 df_colunas = df_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
 df_colunas.columns = ['Nome', 'Telefone', 'Assunto']
@@ -73,8 +73,6 @@ category_patterns = {
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
     #  Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
-    # Categoria Contato Geral
-    # 'Geral': ['Eu mandei mensagem','ola','Bom dia', 'Boa tarde', 'Boa noite', 'Olá', 'Oi', 'tudo bem', 'Gostaria de saber', 'queria saber', 'preciso de ajuda', 'informação', 'ajuda', 'problema', 'questão', 'situação', 'verificar', 'consultar', 'obrigado', 'grato', 'por favor', 'poderia', 'precisa', 'falar', 'atendimento', 'atendente', 'contestar','Não','Okk','ok', 'Ok'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
     # Categoria dos Polos
@@ -135,8 +133,8 @@ def categorize_assunto(assunto):
 # Aplicar categorização
 df_ead_limpo['Categoria'] = df_ead_limpo['Assunto'].apply(categorize_assunto)
 
-#--------------------------------------------------------------------------------------------------------------------------------
-# Outros DataFrames (Presencial e Semipresencial)
+# --------------------------------------------------------------------------------------------------------------------------------
+## Outros DataFrames (Presencial e Semipresencial)
 
 df_colunas2 = df_pres_semi['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
 df_colunas2.columns = ['Nome', 'Telefone', 'Assunto']
@@ -182,8 +180,6 @@ category_patterns2 = {
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
     #  Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
-    # Categoria Contato Geral
-    # 'Geral': ['Eu mandei mensagem','ola','Bom dia', 'Boa tarde', 'Boa noite', 'Olá', 'Oi', 'tudo bem', 'Gostaria de saber', 'queria saber', 'preciso de ajuda', 'informação', 'ajuda', 'problema', 'questão', 'situação', 'verificar', 'consultar', 'obrigado', 'grato', 'por favor', 'poderia', 'precisa', 'falar', 'atendimento', 'atendente', 'contestar','Não','Okk','ok', 'Ok'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
     # Categoria dos Polos
@@ -254,11 +250,12 @@ def categorize_assunto2(assunto):
 # Aplicar categorização
 df_pres_semi_limpo['Categoria'] = df_pres_semi_limpo['Assunto'].apply(categorize_assunto2)
 
-#--------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------
 
-# Suporte DataFrames (Ead)
+## Suporte DataFrames (Ead)
 
-df_colunas3 = df_pres_semi['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
+# CORREÇÃO: df_pres_semi substituído por df_sup_ead
+df_colunas3 = df_sup_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3] 
 df_colunas3.columns = ['Nome', 'Telefone', 'Assunto']
 
 df_colunas3['Nome'] = df_colunas3['Nome'].str.replace('Nome:', '', regex=False).str.strip()
@@ -302,8 +299,6 @@ category_patterns3 = {
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
     #  Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
-    # Categoria Contato Geral
-    # 'Geral': ['Eu mandei mensagem','ola','Bom dia', 'Boa tarde', 'Boa noite', 'Olá', 'Oi', 'tudo bem', 'Gostaria de saber', 'queria saber', 'preciso de ajuda', 'informação', 'ajuda', 'problema', 'questão', 'situação', 'verificar', 'consultar', 'obrigado', 'grato', 'por favor', 'poderia', 'precisa', 'falar', 'atendimento', 'atendente', 'contestar','Não','Okk','ok', 'Ok'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
     # Categoria dos Polos
@@ -372,14 +367,15 @@ def categorize_assunto3(assunto):
     return 'Outros'
 
 # Aplicar categorização
-df_sup_ead_limpo['Categoria'] = df_sup_ead_limpo['Nome'].apply(categorize_assunto3)
+# CORREÇÃO: Aplicando categorize_assunto3 na coluna 'Assunto' e não em 'Nome'
+df_sup_ead_limpo['Categoria'] = df_sup_ead_limpo['Assunto'].apply(categorize_assunto3)
 
-#--------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------------
 
+## Suporte DataFrames (Presencial e Semipresencial)
 
-# Suporte DataFrames (Presencial e Semipresencial)
-
-df_colunas4 = df_pres_semi['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
+# CORREÇÃO: df_pres_semi substituído por df_sup_pres_semi
+df_colunas4 = df_sup_pres_semi['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3] 
 df_colunas4.columns = ['Nome', 'Telefone', 'Assunto']
 
 df_colunas4['Nome'] = df_colunas4['Nome'].str.replace('Nome:', '', regex=False).str.strip()
@@ -423,8 +419,6 @@ category_patterns4 = {
     'Aulas/Horários': ['Aula','Aula inaugural','Aulas','aulas','aula online','férias','Férias','início das aulas','aulas pendentes','começa as aulas'],
     #  Categoria Financeiro/Acordos
     'Financeiro': ['parcelas','Parcelas','parcela','Parcela','cobrança','Cobrança','pendências','Acordo','acordo','Acordos','acordos','quitação','data de vencimento','pagamento','pagamentos','Pagamento','Pagamentos','Boleto','Boletos','boletos','boleto','financeiro','Financeiro','Mensalidade','mensalidade','Contrato','Fatura','fatura','Valores','valores','Consulta de Valores','valores de cursos'],
-    # Categoria Contato Geral
-    # 'Geral': ['Eu mandei mensagem','ola','Bom dia', 'Boa tarde', 'Boa noite', 'Olá', 'Oi', 'tudo bem', 'Gostaria de saber', 'queria saber', 'preciso de ajuda', 'informação', 'ajuda', 'problema', 'questão', 'situação', 'verificar', 'consultar', 'obrigado', 'grato', 'por favor', 'poderia', 'precisa', 'falar', 'atendimento', 'atendente', 'contestar','Não','Okk','ok', 'Ok'],
     # Categoria Biblioteca
     'Minha Biblioteca': ['Biblioteca','biblioteca'],
     # Categoria dos Polos
@@ -495,7 +489,6 @@ def categorize_assunto4(assunto):
 # Aplicar categorização
 df_sup_pres_semi_limpo['Categoria'] = df_sup_pres_semi_limpo['Assunto'].apply(categorize_assunto4)
 
-#--------------------------------------------------------------------------------------------------------------------------------
 
 # --- Barra Lateral (Filtros) ---
 st.sidebar.header("🔍 Filtros")
