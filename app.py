@@ -496,6 +496,8 @@ with col_tab2:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 
 
+# --------------------------------------------------------------------------------------------------------------------------------
+
 # --- GRÁFICOS RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
 st.header("Relatório: Suporte Técnico")
 
@@ -504,24 +506,22 @@ col_graf3, col_graf4 = st.columns(2)
 with col_graf3:
     if not df_sup_ead_filtrado.empty:
         grafico_categoria_sup_ead = (
-            df_sup_ead_filtrado.groupby('Categoria')
-            .size()
+            df_sup_ead_filtrado.groupby('Categoria').size()
             .nlargest(10)
-            .sort_values(ascending=True)
+            .sort_values(ascending=False)
             .reset_index(name='Quantidade')
         )
-
         fig_sup_ead = px.bar(
             grafico_categoria_sup_ead,
             y='Categoria',
             x='Quantidade',
-            orientation='h',
-            title='Top 10 Categorias de Suporte (EAD) (Filtro)',
-            text='Quantidade'
+            title='Relatório - Suporte EAD',
+            labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
         )
-        fig_sup_ead.update_traces(textposition='outside')
-        fig_sup_ead.update_layout(yaxis_title='', xaxis_title='Quantidade', yaxis={'categoryorder': 'total ascending'})
-
+        fig_sup_ead.update_layout(
+            title_x=0.5,
+            xaxis={'categoryorder': 'total descending'}
+        )
         st.plotly_chart(fig_sup_ead, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Suporte EAD (Verifique os filtros).")
@@ -536,19 +536,22 @@ with col_graf4:
         )
         fig_sup_pres_semi = px.bar(
             grafico_sup_pres_semi,
-            x='Quantidade', # Corrigido para X e Y invertidos para melhor visualização
-            y='Categoria',
-            orientation='h',
-            title='Top 10 Categorias - Suporte Presencial/Semi (Filtro)',
+              y='Categoria',
+            x='Quantidade',
+            title='Relatório - Suporte Presencial/Semi',
             labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
         )
-        fig_sup_pres_semi.update_layout(title_x=0.1, yaxis={'categoryorder': 'total ascending'})
+        fig_sup_pres_semi.update_layout(
+            title_x=0.5,
+            xaxis={'categoryorder': 'total descending'}
+        )
         st.plotly_chart(fig_sup_pres_semi, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Suporte Presencial/Semi (Verifique os filtros).")
 
+
 # --- TABELA RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
-st.subheader("Dados Detalhados - Suporte EAD e Presencial/Semipresencial (Filtro)")
+st.subheader("Dados Detalhados - Suporte EAD e Presencial/Semipresencial")
 
 col_tab3, col_tab4 = st.columns(2)
 
@@ -556,7 +559,7 @@ with col_tab3:
    
     tabela_sup_ead = df_sup_ead_filtrado
 
-    st.markdown("**Tabela - Outros EAD**")
+    st.markdown("**Tabela - Suporte EAD**")
 
     if not tabela_sup_ead.empty:
 
@@ -571,7 +574,7 @@ with col_tab4:
 
     tabela_sup_pres_semi = df_sup_pres_semi_filtrado
     
-    st.markdown("**Tabela - Outros Presencial/Semipresencial**")
+    st.markdown("**Tabela - Suporte Presencial/Semipresencial**")
 
     if not tabela_sup_pres_semi.empty:
 
