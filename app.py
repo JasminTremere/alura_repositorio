@@ -418,18 +418,20 @@ with col_graf1:
         grafico_categoria_ead = (
             df_ead_filtrado.groupby('Categoria').size()
             .nlargest(10)
-            .sort_values(ascending=True)
+            .sort_values(ascending=False)
             .reset_index(name='Quantidade')
         )
         fig_ead = px.bar(
             grafico_categoria_ead,
-            x='Quantidade', # Corrigido para X e Y invertidos para melhor visualização
-            y='Categoria',
-            orientation='h',
-            title='Top 10 Categorias - Outros EAD (Filtro)',
+            x='Categoria',
+            y='Quantidade',
+            title='Relatório - Outros EAD',
             labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
         )
-        fig_ead.update_layout(title_x=0.1, yaxis={'categoryorder': 'total ascending'})
+        fig_ead.update_layout(
+            title_x=0.5, 
+            xaxis={'categoryorder': 'total descending'}
+        )
         st.plotly_chart(fig_ead, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Outros EAD (Verifique os filtros).")
@@ -439,18 +441,20 @@ with col_graf2:
         grafico_categoria_pres_semi = (
             df_pres_semi_filtrado.groupby('Categoria').size()
             .nlargest(10)
-            .sort_values(ascending=True)
+            .sort_values(ascending=False)
             .reset_index(name='Quantidade')
         )
         fig_pres_semi = px.bar(
             grafico_categoria_pres_semi,
-            x='Quantidade', # Corrigido para X e Y invertidos para melhor visualização
-            y='Categoria',
-            orientation='h',
-            title='Top 10 Categorias - Outros Presencial/Semi (Filtro)',
+            x='Categoria', 
+            y='Quantidade',
+            title='Relatório - Outros Presencial/Semi',
             labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
         )
-        fig_pres_semi.update_layout(title_x=0.1, yaxis={'categoryorder': 'total ascending'})
+        fig_pres_semi.update_layout(
+            title_x=0.5,
+            xaxis={'categoryorder': 'total ascending'}
+        )
         st.plotly_chart(fig_pres_semi, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Outros Presencial/Semi (Verifique os filtros).")
