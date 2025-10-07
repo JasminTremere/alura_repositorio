@@ -410,7 +410,7 @@ st.markdown("---")
 
 
 # --- GRÁFICOS RELATÓRIO OUTROS (EAD e Presencial/Semipresencial) ---
-st.header("Relatório: Outros Assuntos")
+st.header("Outros Assuntos")
 col_graf1, col_graf2 = st.columns(2)
  
 with col_graf1:
@@ -453,7 +453,7 @@ with col_graf2:
         )
         fig_pres_semi.update_layout(
             title_x=0.5,
-            xaxis={'categoryorder': 'total ascending'}
+            xaxis={'categoryorder': 'total descending'}
         )
         st.plotly_chart(fig_pres_semi, use_container_width=True)
     else:
@@ -461,18 +461,20 @@ with col_graf2:
 
 
 # --- TABELA RELATÓRIO OUTROS (EAD e Presencial/Semipresencial) ---
-st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
+
+st.header("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
+st.subheader("")
 
 col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
-    # 1. Armazena o dataframe filtrado COMPLETO na variável
+   
     tabela_ead = df_ead_filtrado
-    
-    st.markdown("**Detalhes dos Atendimentos EAD**")
-    
+
+    st.markdown("**Tabela - Outros EAD**")
+
     if not tabela_ead.empty:
-        # 2. Exibe o dataframe detalhado, mostrando as colunas essenciais
+       
         st.dataframe(
             tabela_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True
@@ -483,7 +485,7 @@ with col_tab1:
 with col_tab2:
     tabela_pres_semi_resumo = df_pres_semi_filtrado
 
-    st.markdown("**Detalhes dos Atendimentos Presencial/Semipresencial**")
+    st.markdown("**Tabela - Outros Presencial/Semipresencial**")
 
     if not tabela_pres_semi_resumo.empty:
         st.dataframe(
