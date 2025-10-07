@@ -529,12 +529,13 @@ with col_graf3:
 
 with col_graf4:
     if not df_sup_pres_semi_filtrado.empty:
-          grafico_sup_pres_semi = (
+        grafico_sup_pres_semi = (
             df_sup_pres_semi_filtrado.groupby('Categoria').size()
             .nlargest(10)
             .sort_values(ascending=True)
             .reset_index(name='Quantidade')
         )
+
         fig_sup_pres_semi = px.bar(
             grafico_sup_pres_semi,
             x='Categoria',
@@ -542,6 +543,7 @@ with col_graf4:
             title='Relatório - Suporte Presencial/Semi',
             labels={'Categoria': 'Categoria', 'Quantidade': 'Quantidade'}
         )
+    
         fig_sup_pres_semi.update_layout(
             title_x=0.5,
             xaxis={'categoryorder': 'total descending'}
@@ -549,7 +551,6 @@ with col_graf4:
         st.plotly_chart(fig_sup_pres_semi, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Suporte Presencial/Semi .")
-
 # --------------------------------------------------------------------------------------------------------------------------------
 
 # --- TABELA RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
