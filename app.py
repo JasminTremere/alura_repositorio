@@ -527,10 +527,9 @@ with col_graf3:
     else:
         st.warning("Nenhum dado para exibir em Suporte EAD.")
 
- 
 with col_graf4:
-    if not df_pres_semi_filtrado.empty:
-           grafico_sup_pres_semi = (
+    if not df_sup_pres_semi_filtrado.empty:
+          grafico_sup_pres_semi = (
             df_sup_pres_semi_filtrado.groupby('Categoria').size()
             .nlargest(10)
             .sort_values(ascending=True)
@@ -550,6 +549,7 @@ with col_graf4:
         st.plotly_chart(fig_sup_pres_semi, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir em Suporte Presencial/Semi .")
+
 # --------------------------------------------------------------------------------------------------------------------------------
 
 # --- TABELA RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
