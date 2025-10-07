@@ -499,7 +499,7 @@ with col_tab2:
 # --------------------------------------------------------------------------------------------------------------------------------
 
 # --- GRÁFICOS RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
-st.header("Relatório: Suporte Técnico")
+st.header("Suporte ao Aluno - Ead e Presencial/Semipresencial")
 
 
 col_graf3, col_graf4 = st.columns(2)
@@ -588,3 +588,4 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
+
