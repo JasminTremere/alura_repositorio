@@ -553,11 +553,32 @@ st.subheader("Dados Detalhados - Suporte EAD e Presencial/Semipresencial (Filtro
 col_tab3, col_tab4 = st.columns(2)
 
 with col_tab3:
-    tabela_sup_ead = df_sup_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Suporte EAD**")
-    st.dataframe(tabela_sup_ead)
+   
+    tabela_sup_ead = df_sup_ead_filtrado
+
+    st.markdown("**Tabela - Outros EAD**")
+
+    if not tabela_sup_ead.empty:
+
+        st.dataframe(
+            tabela_sup_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
+            use_container_width=True
+        )
+    else:
+        st.info("Nenhum dado detalhado de EAD para exibir.")
 
 with col_tab4:
-    tabela_sup_pres_semi = df_sup_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Suporte Presencial/Semipresencial**")
-    st.dataframe(tabela_sup_pres_semi)
+
+    tabela_sup_pres_semi = df_sup_pres_semi_filtrado
+    
+    st.markdown("**Tabela - Outros Presencial/Semipresencial**")
+
+    if not tabela_sup_pres_semi.empty:
+
+        st.dataframe(
+            tabela_sup_pres_semi[['Nome', 'Telefone', 'Assunto', 'Categoria']],
+            use_container_width=True
+        )
+    else:
+        st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
+# --------------------------------------------------------------------------------------------------------------------------------
