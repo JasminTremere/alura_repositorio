@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 
 # -------------------------------
-# Configuração da página
 st.set_page_config(
     page_title="Dashboard de Análise Ancheita!", 
     page_icon="📊",
@@ -13,24 +12,19 @@ st.set_page_config(
 st.title("👾Dashboard de Análise Ancheita!👾")
 st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
-# Carregar dados - CORREÇÃO: Usando 'encoding='latin1'', 'sep=;'.
-# Adicionado 'header=None' e 'names' para forçar a leitura de múltiplas colunas 
-# e 'on_bad_lines='skip'' para ignorar linhas malformadas, resolvendo o Tokenizing Error.
+# --------------------------------------------------------------------------------------------------------------------------------
 
-try:
-    # Lendo o CSV assumindo 3 colunas (visto no erro: "saw 3") 
-    # e renomeando a coluna principal para facilitar o split.
-    
+try: 
     # DataFrame EAD
     df_ead_raw = pd.read_csv(
         'https://raw.githubusercontent.com/JasminTremere/alura_repositorio/main/dados_ead.csv', 
         sep=';', 
         encoding='latin1', 
-        header=None, # Não usa cabeçalho para evitar o erro de tokenização
-        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'], # Força colunas o suficiente
-        on_bad_lines='skip' # Ignora as linhas mal formadas (como a linha 898)
+        header=None,
+        names=['Acoes_Total_Raw', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5'], 
+        on_bad_lines='skip' 
     )
-    df_ead = df_ead_raw.iloc[1:].copy() # Remove a linha de cabeçalho original se for o caso
+    df_ead = df_ead_raw.iloc[1:].copy() 
     df_ead.columns = ['Ações,%,Total', 'Extra1', 'Extra2', 'Extra3', 'Extra4', 'Extra5']
     
     # DataFrame PRESENCIAL/SEMI
@@ -80,7 +74,6 @@ except Exception as e:
 # --------------------------------------------------------------------------------------------------------------------------------
 ## Processamento DataFrames (Ead)
 
-# O restante do código de processamento se mantém, mas agora os dados devem estar carregados corretamente
 df_colunas = df_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3]
 df_colunas.columns = ['Nome', 'Telefone', 'Assunto']
 
@@ -89,7 +82,8 @@ df_colunas['Telefone'] = df_colunas['Telefone'].str.replace('Telefone:', '', reg
 df_colunas['Assunto'] = df_colunas['Assunto'].str.replace('Assunto:', '', regex=False).str.strip()
 
 df_ead_limpo = df_colunas.copy()
-df_ead_limpo['Tipo'] = 'Outros EAD' # Adiciona coluna de tipo para concatenação
+df_ead_limpo['Tipo'] = 'Outros EAD' 
+
 
 category_patterns = {
     # Categoria Atendimento
@@ -183,7 +177,6 @@ def categorize_assunto(assunto):
                 return category
     return 'Outros'
 
-# Aplicar categorização
 df_ead_limpo['Categoria'] = df_ead_limpo['Assunto'].apply(categorize_assunto)
 
 # --------------------------------------------------------------------------------------------------------------------------------
@@ -197,7 +190,7 @@ df_colunas2['Telefone'] = df_colunas2['Telefone'].str.replace('Telefone:', '', r
 df_colunas2['Assunto'] = df_colunas2['Assunto'].str.replace('Assunto:', '', regex=False).str.strip()
 
 df_pres_semi_limpo = df_colunas2.copy()
-df_pres_semi_limpo['Tipo'] = 'Outros Presencial/Semi' # Adiciona coluna de tipo
+df_pres_semi_limpo['Tipo'] = 'Outros Presencial/Semi'
 
 category_patterns2 = {
     # Categoria Atendimento
@@ -301,12 +294,9 @@ def categorize_assunto2(assunto):
                 return category
     return 'Outros'
 
-# Aplicar categorização
 df_pres_semi_limpo['Categoria'] = df_pres_semi_limpo['Assunto'].apply(categorize_assunto2)
 
 # --------------------------------------------------------------------------------------------------------------------------------
-
-## Suporte DataFrames (Ead)
 ## Processamento Suporte DataFrames (Ead)
 
 df_colunas3 = df_sup_ead['Ações,%,Total'].str.split('|', expand=True).iloc[:, :3] 
@@ -317,7 +307,7 @@ df_colunas3['Telefone'] = df_colunas3['Telefone'].str.replace('Telefone:', '', r
 df_colunas3['Assunto'] = df_colunas3['Assunto'].str.replace('Assunto:', '', regex=False).str.strip()
 
 df_sup_ead_limpo = df_colunas3.copy()
-df_sup_ead_limpo['Tipo'] = 'Suporte EAD' # Adiciona coluna de tipo
+df_sup_ead_limpo['Tipo'] = 'Suporte EAD' 
 
 # Reutiliza o pattern2/3 para suporte EAD
 category_patterns3 = category_patterns2
@@ -333,7 +323,6 @@ def categorize_assunto3(assunto):
                 return category
     return 'Outros'
 
-# Aplicar categorização
 df_sup_ead_limpo['Categoria'] = df_sup_ead_limpo['Assunto'].apply(categorize_assunto3)
 
 # --------------------------------------------------------------------------------------------------------------------------------
@@ -348,10 +337,11 @@ df_colunas4['Telefone'] = df_colunas4['Telefone'].str.replace('Telefone:', '', r
 df_colunas4['Assunto'] = df_colunas4['Assunto'].str.replace('Assunto:', '', regex=False).str.strip()
 
 df_sup_pres_semi_limpo = df_colunas4.copy()
-df_sup_pres_semi_limpo['Tipo'] = 'Suporte Presencial/Semi' # Adiciona coluna de tipo
+df_sup_pres_semi_limpo['Tipo'] = 'Suporte Presencial/Semi'
 
 # Reutiliza o pattern2/3 para suporte Presencial/Semi
 category_patterns4 = category_patterns2 
+
 # Função para categorizar
 def categorize_assunto4(assunto):
     if not isinstance(assunto, str):
@@ -363,7 +353,6 @@ def categorize_assunto4(assunto):
                 return category
     return 'Outros'
 
-# Aplicar categorização
 df_sup_pres_semi_limpo['Categoria'] = df_sup_pres_semi_limpo['Assunto'].apply(categorize_assunto4)
 
 # --------------------------------------------------------------------------------------------------------------------------------
@@ -407,14 +396,16 @@ df_pres_semi_filtrado = df_filtrado_global[df_filtrado_global['Tipo'] == 'Outros
 df_sup_ead_filtrado = df_filtrado_global[df_filtrado_global['Tipo'] == 'Suporte EAD']
 df_sup_pres_semi_filtrado = df_filtrado_global[df_filtrado_global['Tipo'] == 'Suporte Presencial/Semi']
 
+
+
 # --- MÉTRICAS PRINCIPAIS ---
-st.subheader("Métricas Principais (Filtro Global)")
+st.subheader("Métricas Principais")
 
-col1, col2, col3 = st.columns(3)
-col1.metric("Total de registros (Filtro)", df_filtrado_global.shape[0])
-col2.metric("Categorias únicas (Filtro)", df_filtrado_global['Categoria'].nunique())
-col3.metric("Nomes únicos (Filtro)", df_filtrado_global['Nome'].nunique())
-
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Total de registros", df_filtrado_global.shape[0])
+col2.metric("Categorias", df_filtrado_global['Categoria'].nunique())
+col3.metric("Nomes únicos", df_filtrado_global['Nome'].nunique())
+col4.metric("Total de assuntos", df_filtrado_global['Assuntos'].nunique())
 st.markdown("---")
 
 
