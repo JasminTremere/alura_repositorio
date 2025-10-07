@@ -466,16 +466,33 @@ st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
 col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
-    tabela_ead = df_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Tabela - Outros EAD**")
-    st.dataframe(tabela_ead)
+    # 1. Armazena o dataframe filtrado COMPLETO na variável
+    tabela_ead = df_ead_filtrado
+    
+    st.markdown("**Detalhes dos Atendimentos EAD**")
+    
+    if not tabela_ead.empty:
+        # 2. Exibe o dataframe detalhado, mostrando as colunas essenciais
+        st.dataframe(
+            tabela_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
+            use_container_width=True
+        )
+    else:
+        st.info("Nenhum dado detalhado de EAD para exibir.")
 
 with col_tab2:
-    tabela_pres_semi = df_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Tabela - Outros Presencial/Semipresencial**")
-    st.dataframe(tabela_pres_semi)
-    
-st.markdown("---")
+    tabela_pres_semi_resumo = df_pres_semi_filtrado
+
+    st.markdown("**Detalhes dos Atendimentos Presencial/Semipresencial**")
+
+    if not tabela_pres_semi_resumo.empty:
+        st.dataframe(
+            tabela_pres_semi_resumo[['Nome', 'Telefone', 'Assunto', 'Categoria']],
+            use_container_width=True
+        )
+    else:
+        st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
+
 
 # --- GRÁFICOS RELATÓRIO SUPORTE (EAD e Presencial/Semipresencial) ---
 st.header("Relatório: Suporte Técnico")
