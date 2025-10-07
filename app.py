@@ -434,7 +434,7 @@ with col_graf1:
         )
         st.plotly_chart(fig_ead, use_container_width=True)
     else:
-        st.warning("Nenhum dado para exibir em Outros EAD (Verifique os filtros).")
+        st.warning("Nenhum dado para exibir em Outros EAD.")
  
 with col_graf2:
     if not df_pres_semi_filtrado.empty:
@@ -457,22 +457,22 @@ with col_graf2:
         )
         st.plotly_chart(fig_pres_semi, use_container_width=True)
     else:
-        st.warning("Nenhum dado para exibir em Outros Presencial/Semi (Verifique os filtros).")
+        st.warning("Nenhum dado para exibir em Outros Presencial/Semi.")
 
 
 # --- TABELA RELATÓRIO OUTROS (EAD e Presencial/Semipresencial) ---
-st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial (Filtro)")
+st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
 
 col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
-    tabela_ead = df_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Outros EAD**")
+    #tabela_ead = df_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+    st.markdown("**Tabela - Outros EAD**")
     st.dataframe(tabela_ead)
 
 with col_tab2:
-    tabela_pres_semi = df_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
-    st.markdown("**Outros Presencial/Semipresencial**")
+    #tabela_pres_semi = df_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+    st.markdown("**Tabela - Outros Presencial/Semipresencial**")
     st.dataframe(tabela_pres_semi)
     
 st.markdown("---")
