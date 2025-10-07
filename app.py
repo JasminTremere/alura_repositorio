@@ -466,12 +466,12 @@ st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
 col_tab1, col_tab2 = st.columns(2)
 
 with col_tab1:
-    #tabela_ead = df_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+    tabela_ead = df_ead_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
     st.markdown("**Tabela - Outros EAD**")
     st.dataframe(tabela_ead)
 
 with col_tab2:
-    #tabela_pres_semi = df_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+    tabela_pres_semi = df_pres_semi_filtrado.groupby('Categoria').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
     st.markdown("**Tabela - Outros Presencial/Semipresencial**")
     st.dataframe(tabela_pres_semi)
     
