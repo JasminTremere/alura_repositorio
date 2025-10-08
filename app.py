@@ -480,7 +480,7 @@ with col_tab1:
             hide_index=True,
             column_config={
                 "Assunto": st.column_config.Column(
-                    width="small" # Define a largura da coluna Assunto como pequena
+                    width="medium" # Define a largura da coluna Assunto como pequena
                 )
             }
         )
@@ -596,5 +596,3 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
-
-
