@@ -480,7 +480,13 @@ with col_tab1:
             hide_index=True,
              column_config={
                 "Assunto": st.column_config.Column(
-                    width=150
+                    width=200
+                ),
+                "Telefone": st.column_config.Column(
+                    width="small"
+                ),
+                "Nome": st.column_config.Column(
+                    width="small"
                 )
             }
         )
@@ -499,9 +505,12 @@ with col_tab2:
             hide_index=True,
             column_config={
                 "Assunto": st.column_config.Column(
-                    width=150  # Tente 150. Se ainda não funcionar, tente 100
+                    width=200  # Tente 150. Se ainda não funcionar, tente 100
                 ),
              "Telefone": st.column_config.Column(
+                    width="small"
+                ),
+                "Nome": st.column_config.Column(
                     width="small"
                 )
             }
