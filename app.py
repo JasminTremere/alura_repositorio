@@ -478,9 +478,9 @@ with col_tab1:
             tabela_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True,
             hide_index=True,
-            column_config={
+             column_config={
                 "Assunto": st.column_config.Column(
-                    width="20px"
+                    width=150  # Tente 150. Se ainda não funcionar, tente 100
                 )
             }
         )
@@ -496,7 +496,12 @@ with col_tab2:
         st.dataframe(
             tabela_pres_semi_resumo[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True,
-            hide_index=True
+            hide_index=True,
+            column_config={
+                "Assunto": st.column_config.Column(
+                    width=150  # Tente 150. Se ainda não funcionar, tente 100
+                )
+            }
         )
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
