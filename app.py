@@ -635,3 +635,4 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
+
