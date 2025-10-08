@@ -500,6 +500,9 @@ with col_tab2:
             column_config={
                 "Assunto": st.column_config.Column(
                     width=125  # Tente 150. Se ainda não funcionar, tente 100
+                ),
+             "Telefone": st.column_config.Column(
+                    width="small"
                 )
             }
         )
