@@ -569,7 +569,8 @@ with col_tab3:
 
         st.dataframe(
             tabela_sup_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
     else:
         st.info("Nenhum dado detalhado de EAD para exibir.")
@@ -584,7 +585,8 @@ with col_tab4:
 
         st.dataframe(
             tabela_sup_pres_semi[['Nome', 'Telefone', 'Assunto', 'Categoria']],
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
