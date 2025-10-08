@@ -480,7 +480,7 @@ with col_tab1:
             hide_index=True,
             column_config={
                 "Assunto": st.column_config.Column(
-                    width="50px"
+                    width="20px"
                 )
             }
         )
