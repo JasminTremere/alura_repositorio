@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("📊 Dashboard de Análise Ancheita!")
+st.title("👾Dashboard de Análise Ancheita!👾")
 st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
 # --------------------------------------------------------------------------------------------------------------------------------
