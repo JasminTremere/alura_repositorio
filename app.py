@@ -477,7 +477,13 @@ with col_tab1:
         st.dataframe(
             tabela_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True,
-            hide_index=True
+            hide_index=True,
+            column_config={
+                "Assunto": st.column_config.Column(
+                    width="small" # Define a largura da coluna Assunto como pequena
+                )
+            }
+        )
         )
     else:
         st.info("Nenhum dado detalhado de EAD para exibir.")
@@ -591,3 +597,4 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
+
