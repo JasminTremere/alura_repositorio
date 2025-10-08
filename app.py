@@ -462,8 +462,7 @@ with col_graf2:
 
 # --- TABELA RELATÓRIO OUTROS (EAD e Presencial/Semipresencial) ---
 
-st.header("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
-st.subheader("")
+st.subheader("Dados Detalhados - Outros EAD e Presencial/Semipresencial")
 
 col_tab1, col_tab2 = st.columns(2)
 
@@ -588,4 +587,3 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
-
