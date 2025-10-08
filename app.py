@@ -592,7 +592,18 @@ with col_tab3:
         st.dataframe(
             tabela_sup_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True,
-            hide_index=True
+            hide_index=True,
+            column_config={
+                "Assunto": st.column_config.Column(
+                    width=200  # Tente 150. Se ainda não funcionar, tente 100
+                ),
+             "Telefone": st.column_config.Column(
+                    width="small"
+                ),
+                "Nome": st.column_config.Column(
+                    width="small"
+                )
+            }
         )
     else:
         st.info("Nenhum dado detalhado de EAD para exibir.")
@@ -608,7 +619,18 @@ with col_tab4:
         st.dataframe(
             tabela_sup_pres_semi[['Nome', 'Telefone', 'Assunto', 'Categoria']],
             use_container_width=True,
-            hide_index=True
+            hide_index=True,
+            column_config={
+                "Assunto": st.column_config.Column(
+                    width=200  # Tente 150. Se ainda não funcionar, tente 100
+                ),
+             "Telefone": st.column_config.Column(
+                    width="small"
+                ),
+                "Nome": st.column_config.Column(
+                    width="small"
+                )
+            }
         )
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
