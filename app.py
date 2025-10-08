@@ -4,12 +4,12 @@ import plotly.express as px
 
 # -------------------------------
 st.set_page_config(
-    page_title="📊 Dashboard de Análise Ancheita!", 
+    page_title="Dashboard de Análise Ancheita!", 
     page_icon="📊",
     layout="wide"
 )
 
-st.title("Dashboard de Análise Ancheita!")
+st.title("📊 Dashboard de Análise Ancheita!")
 st.markdown("Análise de assuntos extraídos em CSV do Blip.")
 
 # --------------------------------------------------------------------------------------------------------------------------------
@@ -635,4 +635,3 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
-
