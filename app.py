@@ -484,7 +484,6 @@ with col_tab1:
                 )
             }
         )
-        )
     else:
         st.info("Nenhum dado detalhado de EAD para exibir.")
 
@@ -597,4 +596,5 @@ with col_tab4:
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
 # --------------------------------------------------------------------------------------------------------------------------------
+
 
