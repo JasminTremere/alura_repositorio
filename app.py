@@ -480,7 +480,7 @@ with col_tab1:
             hide_index=True,
              column_config={
                 "Assunto": st.column_config.Column(
-                    width=125
+                    width=150
                 )
             }
         )
@@ -499,7 +499,7 @@ with col_tab2:
             hide_index=True,
             column_config={
                 "Assunto": st.column_config.Column(
-                    width=125  # Tente 150. Se ainda não funcionar, tente 100
+                    width=150  # Tente 150. Se ainda não funcionar, tente 100
                 ),
              "Telefone": st.column_config.Column(
                     width="small"
