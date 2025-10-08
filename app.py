@@ -476,7 +476,8 @@ with col_tab1:
        
         st.dataframe(
             tabela_ead[['Nome', 'Telefone', 'Assunto', 'Categoria']],
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
     else:
         st.info("Nenhum dado detalhado de EAD para exibir.")
@@ -489,7 +490,8 @@ with col_tab2:
     if not tabela_pres_semi_resumo.empty:
         st.dataframe(
             tabela_pres_semi_resumo[['Nome', 'Telefone', 'Assunto', 'Categoria']],
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
     else:
         st.info("Nenhum dado detalhado de Presencial/Semipresencial para exibir.")
