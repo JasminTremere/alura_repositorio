@@ -1,143 +1,128 @@
 import streamlit as st
-import pandas as pd 
-import plotly.express as px 
+import pandas as pd
+import requests
+import plotly.express as px
 
-# Projeto Python
-
-# Config Pág
+# --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(
-    page_title="Dashboard Salários Área de Dados",
-    page_icon="🎶",
-    layout="wide",
+    page_title="Dashboard Anchieta", 
+    page_icon="📊",
+    layout="wide"
 )
 
-# Config Dados (DataFrame que foi disponibilizado)
-df = pd.read_csv("https://raw.githubusercontent.com/vqrca/dashboard_salarios_dados/refs/heads/main/dados-imersao-final.csv")
+API_URL = "https://app.anchieta.br/Relatorio_Anchieta/python/banco.php"
 
-# --- Barra Lateral (Filtros) ---
+def load_data():
+    try:
+        resp = requests.get(API_URL, timeout=30)
+        resp.raise_for_status()
+        dados_json = resp.json()
+        if isinstance(dados_json, dict) and 'data' in dados_json:
+            return pd.DataFrame(dados_json['data'])
+        return pd.DataFrame(dados_json)
+    except Exception as e:
+        st.error(f"Erro ao conectar com a API: {e}")
+        return pd.DataFrame()
 
-st.sidebar.header("🔍 Filtros")
+# 1. Carregar e Limpar os dados
+df_raw = load_data()
 
-# Filtro de Ano
-anos_disponiveis = sorted(df['ano'].unique())
-anos_selecionados = st.sidebar.multiselect("Ano", anos_disponiveis, default=anos_disponiveis)
+if not df_raw.empty:
+    for col in df_raw.columns:
+        if df_raw[col].dtype == 'object':
+            df_raw[col] = df_raw[col].str.replace('**', '', regex=False).str.strip()
 
-# Filtro de Senioridade
-senioridades_disponiveis = sorted(df['senioridade'].unique())
-senioridades_selecionadas = st.sidebar.multiselect("Senioridade", senioridades_disponiveis, default=senioridades_disponiveis)
+    # --- BARRA LATERAL (FILTROS) ---
+    st.sidebar.header("🔍 Filtros")
+    categorias_disponiveis = sorted(df_raw['CATEGORIA'].unique())
+    categorias_selecionadas = st.sidebar.multiselect("Filtrar por Categoria", categorias_disponiveis)
+    nomes_disponiveis = sorted(df_raw['NOME'].unique())
+    nomes_selecionados = st.sidebar.multiselect("Filtrar por Nome", nomes_disponiveis)
+    telefones_disponiveis = sorted(df_raw['TELEFONE'].unique())
+    telefones_selecionados = st.sidebar.multiselect("Filtrar por Telefone", telefones_disponiveis)
 
-# Filtro por Tipo de Contrato
-contratos_disponiveis = sorted(df['contrato'].unique())
-contratos_selecionados = st.sidebar.multiselect("Tipo de Contrato", contratos_disponiveis, default=contratos_disponiveis)
+    # --- APLICAR FILTROS ---
+    df_filtrado = df_raw.copy()
+    if categorias_selecionadas:
+        df_filtrado = df_filtrado[df_filtrado['CATEGORIA'].isin(categorias_selecionadas)]
+    if nomes_selecionados:
+        df_filtrado = df_filtrado[df_filtrado['NOME'].isin(nomes_selecionados)]
+    if telefones_selecionados:
+        df_filtrado = df_filtrado[df_filtrado['TELEFONE'].isin(telefones_selecionados)]
 
-# Filtro por Tamanho da Empresa
-tamanhos_disponiveis = sorted(df['tamanho_empresa'].unique())
-tamanhos_selecionados = st.sidebar.multiselect("Tamanho da Empresa", tamanhos_disponiveis, default=tamanhos_disponiveis)
+    # --- INTERFACE PRINCIPAL ---
+    st.title("📊 Dashboard de Análise Anchieta")
 
+    # --- MÉTRICAS ---
+    st.subheader("Métricas Principais")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Total de registros", len(df_filtrado))
+    c2.metric("Categorias Únicas", df_filtrado['CATEGORIA'].nunique())
+    c3.metric("Contatos Únicos", df_filtrado['TELEFONE'].nunique())
+    st.markdown("---")
 
-# DataFrame filtrado para os filtros
-# --- Filtragem do DataFrame ---
-# O dataframe principal é filtrado com base nas seleções feitas na barra lateral.
-df_filtrado = df[
-    (df['ano'].isin(anos_selecionados)) &
-    (df['senioridade'].isin(senioridades_selecionadas)) &
-    (df['contrato'].isin(contratos_selecionados)) &
-    (df['tamanho_empresa'].isin(tamanhos_selecionados))
-]
+    if not df_filtrado.empty:
+        # --- PRIMEIRA LINHA DE GRÁFICOS ---
+        st.subheader("Análise de Categorias e Assuntos")
+        col_graf1, col_graf2 = st.columns(2)
 
-# --- Conteúdo Principal ---
-st.title("👾Dashboard de Análise de Salários👾")
-st.markdown("Explore os dados na área de dados nos últimos anos. Utilize os filtros à esquerda para refinar sua análise.")
+        with col_graf1:
+            grafico_categoria = df_filtrado.groupby('CATEGORIA').size().nlargest(10).reset_index(name='Quantidade')
+            fig_cat = px.bar(grafico_categoria, x='CATEGORIA', y='Quantidade', title="Top 10 Categorias", text_auto=True)
+            st.plotly_chart(fig_cat, use_container_width=True)
 
-# --- Métricas Principais (KPIs) ---
-st.subheader("Métricas gerais (Salário anual em USD)")
+        with col_graf2:
+            grafico_assunto = df_filtrado['CATEGORIA'].value_counts().reset_index()
+            grafico_assunto.columns = ['CATEGORIA', 'Quantidade']
+            fig_assunto = px.pie(grafico_assunto, values='Quantidade', names='CATEGORIA', title="Distribuição de Assuntos", hole=0.5)
+            fig_assunto.update_traces(textinfo='percent+label')
+            st.plotly_chart(fig_assunto, use_container_width=True)
 
-if not df_filtrado.empty:
-    salario_medio = df_filtrado['usd'].mean()
-    salario_maximo = df_filtrado['usd'].max()
-    total_registros = df_filtrado.shape[0]
-    cargo_mais_frequente = df_filtrado["cargo"].mode()[0]
+        st.markdown("---")
+        st.subheader("🔍 Detalhamento Adicional")
+        
+        # --- SEGUNDA LINHA: GRÁFICOS DE OUTROS E SUPORTE ---
+        col_graf3, col_graf4 = st.columns(2)
+
+        df_outros = df_filtrado[df_filtrado['CATEGORIA'] == 'Outros']
+        df_sup = df_filtrado[df_filtrado['CATEGORIA'] == 'Suporte']
+
+        with col_graf3:
+            if not df_outros.empty:
+                data_outros = df_outros.groupby('SUBCATEGORIA').size().nlargest(10).reset_index(name='Quantidade')
+                fig_outros = px.bar(data_outros, x='SUBCATEGORIA', y='Quantidade', title="Subcategorias: Outros", text_auto=True)
+                st.plotly_chart(fig_outros, use_container_width=True)
+            else:
+                st.info("Nenhum dado em 'Outros'.")
+
+        with col_graf4:
+            if not df_sup.empty:
+                data_sup = df_sup.groupby('SUBCATEGORIA').size().nlargest(10).reset_index(name='Quantidade')
+                fig_sup = px.bar(data_sup, x='SUBCATEGORIA', y='Quantidade', title="Subcategorias: Suporte", text_auto=True, color_discrete_sequence=['#2ca02c'])
+                st.plotly_chart(fig_sup, use_container_width=True)
+            else:
+                st.info("Nenhum dado em 'Suporte'.")
+
+        # --- TERCEIRA LINHA: TABELAS (ALINHADAS COM OS GRÁFICOS ACIMA) ---
+        col_graf5, col_graf6 = st.columns(2)
+
+        with col_graf5:
+            if not df_outros.empty:
+                st.write("**Tabela: Detalhes de Outros**")
+                # Mostramos a contagem para a tabela ser igual ao gráfico
+                tab_outros = df_outros.groupby('SUBCATEGORIA').size().reset_index(name='Quantidade').sort_values('Quantidade', ascending=False)
+                st.dataframe(tab_outros, use_container_width=True, hide_index=True)
+
+        with col_graf6:
+            if not df_sup.empty:
+                st.write("**Tabela: Detalhes de Suporte**")
+                tab_sup = df_sup.groupby('SUBCATEGORIA').size().reset_index(name='Quantidade').sort_values('Quantidade', ascending=False)
+                st.dataframe(tab_sup, use_container_width=True, hide_index=True)
+        
+        st.markdown("---")
+        st.subheader("📋 Dados Detalhados")
+        st.dataframe(df_filtrado, use_container_width=True, hide_index=True)
+    else:
+        st.warning("Nenhum dado disponível para os filtros selecionados.")
 else:
-    salario_medio, salario_mediano, salario_maximo, total_registros, cargo_mais_comum = 0, 0, 0, ""
-
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Salário médio", f"${salario_medio:,.0f}")
-col2.metric("Salário máximo", f"${salario_maximo:,.0f}")
-col3.metric("Total de registros", f"{total_registros:,}")
-col4.metric("Cargo mais frequente", cargo_mais_frequente)
-
-st.markdown("---")
-
-
-# --- Análises Visuais com Plotly ---
-st.subheader("Gráficos")
-
-col_graf1, col_graf2 = st.columns(2)
-
-with col_graf1:
-    if not df_filtrado.empty:
-        top_cargos = df_filtrado.groupby('cargo')['usd'].mean().nlargest(10).sort_values(ascending=True).reset_index()
-        grafico_cargos = px.bar(
-            top_cargos,
-            x='usd',
-            y='cargo',
-            orientation='h',
-            title="Top 10 cargos por salário médio",
-            labels={'usd': 'Média salarial anual (USD)', 'cargo': ''}
-        )
-        grafico_cargos.update_layout(title_x=0.1, yaxis={'categoryorder':'total ascending'})
-        st.plotly_chart(grafico_cargos, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir no gráfico de cargos.")
-
-with col_graf2:
-    if not df_filtrado.empty:
-        grafico_hist = px.histogram(
-            df_filtrado,
-            x='usd',
-            nbins=30,
-            title="Distribuição de salários anuais",
-            labels={'usd': 'Faixa salarial (USD)', 'count': ''}
-        )
-        grafico_hist.update_layout(title_x=0.1)
-        st.plotly_chart(grafico_hist, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir no gráfico de distribuição.")
-
-col_graf3, col_graf4 = st.columns(2)
-
-with col_graf3:
-    if not df_filtrado.empty:
-        remoto_contagem = df_filtrado['remoto'].value_counts().reset_index()
-        remoto_contagem.columns = ['tipo_trabalho', 'quantidade']
-        grafico_remoto = px.pie(
-            remoto_contagem,
-            names='tipo_trabalho',
-            values='quantidade',
-            title='Proporção dos tipos de trabalho',
-            hole=0.5
-        )
-        grafico_remoto.update_traces(textinfo='percent+label')
-        grafico_remoto.update_layout(title_x=0.1)
-        st.plotly_chart(grafico_remoto, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir no gráfico dos tipos de trabalho.")
-
-with col_graf4:
-    if not df_filtrado.empty:
-        df_ds = df_filtrado[df_filtrado['cargo'] == 'Data Scientist']
-        media_ds_pais = df_ds.groupby('residencia_iso3')['usd'].mean().reset_index()
-        grafico_paises = px.choropleth(media_ds_pais,
-            locations='residencia_iso3',
-            color='usd',
-            color_continuous_scale='rdylgn',
-            title='Salário médio de Cientista de Dados por país',
-            labels={'usd': 'Salário médio (USD)', 'residencia_iso3': 'País'})
-        grafico_paises.update_layout(title_x=0.1)
-        st.plotly_chart(grafico_paises, use_container_width=True)
-    else:
-        st.warning("Nenhum dado para exibir no gráfico de países.")
-
-# --- Tabela de Dados Detalhados ---
-st.subheader("Dados Detalhados")
-st.dataframe(df_filtrado)
+    st.error("O banco de dados está vazio ou a API não respondeu.")
